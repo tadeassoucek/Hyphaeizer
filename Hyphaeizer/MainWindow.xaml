@@ -1,0 +1,60 @@
+﻿<Window x:Class="Hyphaeizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hyphaeizer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="On_CommandSave"/>
+    </Window.CommandBindings>
+    
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <!--<Label></Label>-->
+        </StatusBar>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button Name="generateButton" Grid.ColumnSpan="2" Click="generateButton_Click">Generate</Button>
+                <Label Grid.Row="1">Iterations:</Label>
+                <TextBox Name="iterationsTextBox" Grid.Row="1" Grid.Column="1" TextChanged="iterationsTextBox_TextChanged"/>
+                <Label Grid.Row="2">Pen intensity:</Label>
+                <TextBox Name="penIntensityTextBox" Grid.Row="2" Grid.Column="1" TextChanged="penIntensityTextBox_TextChanged"/>
+                <Label Grid.Row="3">Split probability:</Label>
+                <TextBox Name="splitProbabilityTextBox" Grid.Row="3" Grid.Column="1" TextChanged="splitProbabilityTextBox_TextChanged"/>
+                <Label Grid.Row="4">Speed:</Label>
+                <TextBox Name="speedTextBox" Grid.Row="4" Grid.Column="1" TextChanged="speedTextBox_TextChanged"/>
+                <Label Grid.Row="5">Initial spores:</Label>
+                <TextBox Name="initialSporesTextBox" Grid.Row="5" Grid.Column="1" TextChanged="initialSporesTextBox_TextChanged"/>
+                <Label Grid.Row="6">Angle change modifier:</Label>
+                <TextBox Name="angleChangeModTextBox" Grid.Row="6" Grid.Column="1" TextChanged="angleChangeModTextBox_TextChanged"></TextBox>
+            </Grid>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <Image Name="viewportResult" Grid.Column="2" SnapsToDevicePixels="true"/>
+        </Grid>
+    </DockPanel>
+</Window>
