@@ -96,7 +96,7 @@ namespace Hyphaeizer
         public class Config
         {
             public double speed = .2;
-            public double angleChangeModifier = 1;
+            public double angleChangeModifier = .5;
             public int iterations = 10_000;
             public double splitProbability = .0025;
             public float penIntensity = 8;
@@ -145,12 +145,10 @@ namespace Hyphaeizer
                 if (x2 >= img.width) x2 = 0;
                 if (y2 >= img.height) y2 = 0;
 
-                var (rx1, ry1) = (1 - (X - x1), 1 - (Y - y1));
-                var (rx2, ry2) = (1 - rx1, 1 - ry1);
+                var (rx2, ry2) = (X - x1, Y - y1);
+                var (rx1, ry1) = (1 - rx2, 1 - ry2);
 
-                var p = sim.config.penIntensity;
-
-                Pixel makePixel(double rx, double ry) => new((float)(p * rx * ry), AllowedChannels);
+                Pixel makePixel(double rx, double ry) => new((float)(sim.config.penIntensity * rx * ry), AllowedChannels);
 
                 img[x1, y1] += makePixel(rx1, ry1);
                 img[x2, y1] += makePixel(rx2, ry1);
