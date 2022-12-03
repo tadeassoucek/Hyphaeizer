@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hyphaeizer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Hyphaeizer" Height="450" Width="800">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Save" Executed="On_CommandSave"/>
     </Window.CommandBindings>
@@ -35,22 +35,35 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Button Name="generateButton" Grid.ColumnSpan="2" Click="generateButton_Click">Generate</Button>
-                <Label Grid.Row="1">Iterations:</Label>
-                <TextBox Name="iterationsTextBox" Grid.Row="1" Grid.Column="1" TextChanged="iterationsTextBox_TextChanged"/>
-                <Label Grid.Row="2">Pen intensity:</Label>
-                <TextBox Name="penIntensityTextBox" Grid.Row="2" Grid.Column="1" TextChanged="penIntensityTextBox_TextChanged"/>
-                <Label Grid.Row="3">Split probability:</Label>
-                <TextBox Name="splitProbabilityTextBox" Grid.Row="3" Grid.Column="1" TextChanged="splitProbabilityTextBox_TextChanged"/>
-                <Label Grid.Row="4">Speed:</Label>
-                <TextBox Name="speedTextBox" Grid.Row="4" Grid.Column="1" TextChanged="speedTextBox_TextChanged"/>
-                <Label Grid.Row="5">Initial spores:</Label>
-                <TextBox Name="initialSporesTextBox" Grid.Row="5" Grid.Column="1" TextChanged="initialSporesTextBox_TextChanged"/>
-                <Label Grid.Row="6">Angle change modifier:</Label>
-                <TextBox Name="angleChangeModTextBox" Grid.Row="6" Grid.Column="1" TextChanged="angleChangeModTextBox_TextChanged"></TextBox>
+
+                <Label Grid.Row="1">Size:</Label>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Name="imageWidthTextBox" TextChanged="imageWidthTextBox_TextChanged"/>
+                    <TextBox Name="imageHeightTextBox" Grid.Column="1" TextChanged="imageHeightTextBox_TextChanged"/>
+                </Grid>
+                
+                <Label Grid.Row="2">Iterations:</Label>
+                <TextBox Name="iterationsTextBox" Grid.Row="2" Grid.Column="1" TextChanged="iterationsTextBox_TextChanged"/>
+                <Label Grid.Row="3">Pen intensity:</Label>
+                <TextBox Name="penIntensityTextBox" Grid.Row="3" Grid.Column="1" TextChanged="penIntensityTextBox_TextChanged"/>
+                <Label Grid.Row="4">Split probability:</Label>
+                <TextBox Name="splitProbabilityTextBox" Grid.Row="4" Grid.Column="1" TextChanged="splitProbabilityTextBox_TextChanged"/>
+                <Label Grid.Row="5">Speed:</Label>
+                <TextBox Name="speedTextBox" Grid.Row="5" Grid.Column="1" TextChanged="speedTextBox_TextChanged"/>
+                <Label Grid.Row="6">Initial spores:</Label>
+                <TextBox Name="initialSporesTextBox" Grid.Row="6" Grid.Column="1" TextChanged="initialSporesTextBox_TextChanged"/>
+                <Label Grid.Row="7">Angle change modifier:</Label>
+                <TextBox Name="angleChangeModTextBox" Grid.Row="7" Grid.Column="1" TextChanged="angleChangeModTextBox_TextChanged"></TextBox>
             </Grid>
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>

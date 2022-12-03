@@ -42,6 +42,8 @@ namespace Hyphaeizer
         bool locked = false;
         byte* backBuffer;
 
+        public FastWriteableBitmap(int width, int height, Image imageControl) : this(width, height) => Attach(imageControl);
+
         public FastWriteableBitmap(int width, int height)
         {
             Width = width;

@@ -11,6 +11,7 @@ namespace Hyphaeizer
     [Flags]
     public enum ChannelFlags
     {
+        None = 0,
         All = Red | Green | Blue,
         Red = 0x1,
         Green = 0x2,

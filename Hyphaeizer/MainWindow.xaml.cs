@@ -23,31 +23,63 @@ namespace Hyphaeizer
     /// </summary>
     public partial class MainWindow : Window
     {
-        const int IMAGE_WIDTH = 1200, IMAGE_HEIGHT = 720;
+        const int MAX_IMAGE_SIZE = ushort.MaxValue;
+
+        bool imgSizeChanged = false;
+        int _imageWidth, _imageHeight;
+
+        int ImageWidth
+        {
+            get => _imageWidth;
+            set
+            {
+                imgSizeChanged = true;
+                _imageWidth = value;
+            }
+        }
+
+        int ImageHeight
+        {
+            get => _imageHeight;
+            set
+            {
+                imgSizeChanged = true;
+                _imageHeight = value;
+            }
+        }
 
         readonly Simulator sim;
-        readonly FastWriteableBitmap bmp;
+        FastWriteableBitmap bmp;
 
         public MainWindow()
         {
             InitializeComponent();
             RenderOptions.SetBitmapScalingMode(viewportResult, BitmapScalingMode.NearestNeighbor);
 
+            ImageWidth = 800;
+            ImageHeight = 600;
+
             sim = new();
-            bmp = new(IMAGE_WIDTH, IMAGE_HEIGHT);
+            bmp = new(ImageWidth, ImageHeight, viewportResult);
+            imageWidthTextBox.Text = ImageWidth.ToString();
+            imageHeightTextBox.Text = ImageHeight.ToString();
             iterationsTextBox.Text = sim.config.iterations.ToString();
             penIntensityTextBox.Text = sim.config.penIntensity.ToString();
             splitProbabilityTextBox.Text = sim.config.splitProbability.ToString();
             speedTextBox.Text = sim.config.speed.ToString();
             initialSporesTextBox.Text = sim.config.initialSpores.ToString();
             angleChangeModTextBox.Text = sim.config.angleChangeModifier.ToString();
-
-            bmp.Attach(viewportResult);
         }
 
         private void generateButton_Click(object sender, RoutedEventArgs e)
         {
-            sim.GenerateSingleImage(IMAGE_WIDTH, IMAGE_HEIGHT).PutOnFastWriteableBitmap(bmp);
+            if (imgSizeChanged)
+            {
+                bmp = new FastWriteableBitmap(ImageWidth, ImageHeight, viewportResult);
+                imgSizeChanged = false;
+            }
+
+            sim.GenerateSingleImage(ImageWidth, ImageHeight).PutOnFastWriteableBitmap(bmp);
         }
 
         private void iterationsTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -89,10 +121,10 @@ namespace Hyphaeizer
         private void initialSporesTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var tb = (TextBox)sender;
-            if (!int.TryParse(tb.Text, out sim.config.initialSpores))
-                tb.Background = Brushes.Red;
-            else
+            if (int.TryParse(tb.Text, out sim.config.initialSpores) && sim.config.initialSpores > 0)
                 tb.Background = Brushes.White;
+            else
+                tb.Background = Brushes.Red;
         }
 
         private void angleChangeModTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -102,6 +134,30 @@ namespace Hyphaeizer
                 tb.Background = Brushes.Red;
             else
                 tb.Background = Brushes.White;
+        }
+
+        private void imageWidthTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = (TextBox)sender;
+            if (int.TryParse(tb.Text, out int w) && w > 0 && w < MAX_IMAGE_SIZE)
+            {
+                ImageWidth = w;
+                tb.Background = Brushes.White;
+            }
+            else
+                tb.Background = Brushes.Red;
+        }
+
+        private void imageHeightTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = (TextBox)sender;
+            if (int.TryParse(tb.Text, out int h) && h > 0 && h < MAX_IMAGE_SIZE)
+            {
+                ImageHeight = h;
+                tb.Background = Brushes.White;
+            }
+            else
+                tb.Background = Brushes.Red;
         }
 
         private void On_CommandSave(object sender, ExecutedRoutedEventArgs e)
