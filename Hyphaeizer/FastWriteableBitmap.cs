@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DrawingColor = System.Drawing.Color;
 
 namespace Hyphaeizer
 {
@@ -79,7 +76,7 @@ namespace Hyphaeizer
         public void Attach(Image imageControl) => imageControl.Source = bitmap;
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        static void SetPixel(byte* buffer, int index, Color color)
+        static void SetPixel(byte* buffer, int index, DrawingColor color)
         {
             buffer[index] = color.R;
             buffer[index + 1] = color.G;
@@ -89,15 +86,15 @@ namespace Hyphaeizer
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         int PointToIndex(int x, int y) => (y * bitmap.BackBufferStride) + x * BYTES_PER_PIXEL;
 
-        public void SetPixel(int x, int y, Color color) => SetPixel(backBuffer, PointToIndex(x, y), color);
+        public void SetPixel(int x, int y, DrawingColor color) => SetPixel(backBuffer, PointToIndex(x, y), color);
 
-        public Color GetPixel(int x, int y)
+        public DrawingColor GetPixel(int x, int y)
         {
             var index = PointToIndex(x, y);
-            return Color.FromRgb(backBuffer[index], backBuffer[index + 1], backBuffer[index + 2]);
+            return DrawingColor.FromArgb(backBuffer[index], backBuffer[index + 1], backBuffer[index + 2]);
         }
 
-        public void Fill(Int32Rect rect, Color color)
+        public void Fill(Int32Rect rect, DrawingColor color)
         {
 #if DEBUG
             if (!locked)

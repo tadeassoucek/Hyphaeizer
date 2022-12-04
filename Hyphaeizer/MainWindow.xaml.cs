@@ -1,20 +1,11 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Hyphaeizer
 {
@@ -55,6 +46,7 @@ namespace Hyphaeizer
         {
             InitializeComponent();
             RenderOptions.SetBitmapScalingMode(viewportResult, BitmapScalingMode.NearestNeighbor);
+            RenderOptions.SetBitmapScalingMode(overlayImage, BitmapScalingMode.NearestNeighbor);
 
             ImageWidth = 800;
             ImageHeight = 600;
@@ -79,7 +71,10 @@ namespace Hyphaeizer
                 imgSizeChanged = false;
             }
 
-            sim.GenerateSingleImage(ImageWidth, ImageHeight).PutOnFastWriteableBitmap(bmp);
+            if (sim.OverlayBitmap is null)
+                sim.GenerateSingleImage(ImageWidth, ImageHeight).PutOnFastWriteableBitmap(bmp);
+            else
+                sim.GenerateSingleImage().PutOnFastWriteableBitmap(bmp);
         }
 
         private void iterationsTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -174,6 +169,40 @@ namespace Hyphaeizer
                 PngBitmapEncoder encoder = new();
                 encoder.Frames.Add(BitmapFrame.Create(bmp.bitmap));
                 encoder.Save(stream);
+            }
+        }
+
+        private void overlayImageOpacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var sl = (Slider)sender;
+            if (overlayImage is not null)
+                overlayImage.Opacity = sl.Value / 100;
+        }
+
+        private void On_CommandOpen(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog()
+            {
+                Filter = "Image files|*.png;*.jpg;*.gif|All files|*.*",
+                Title = "Select overlay image location"
+            };
+
+            if (dialog.ShowDialog(this) == true)
+            {
+                using MemoryStream memory = new();
+                sim.OverlayBitmap = new System.Drawing.Bitmap(dialog.FileName);
+                sim.OverlayBitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                overlayImage.Source = bitmapImage;
+                ImageWidth = sim.OverlayBitmap.Width;
+                ImageHeight = sim.OverlayBitmap.Height;
+                imageWidthTextBox.Text = ImageWidth.ToString();
+                imageHeightTextBox.Text = ImageHeight.ToString();
             }
         }
     }
